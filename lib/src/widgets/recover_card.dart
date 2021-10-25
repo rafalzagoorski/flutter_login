@@ -1,20 +1,23 @@
 part of auth_card;
 
 class _RecoverCard extends StatefulWidget {
-  _RecoverCard(
+  const _RecoverCard(
       {Key? key,
       required this.userValidator,
-      required this.onSwitchLogin,
+      required this.onBack,
       required this.userType,
       this.loginTheme,
-      required this.navigateBack})
+      required this.navigateBack,
+      required this.onSubmitCompleted})
       : super(key: key);
 
   final FormFieldValidator<String>? userValidator;
-  final Function onSwitchLogin;
+  final Function onBack;
   final LoginUserType userType;
   final LoginTheme? loginTheme;
   final bool navigateBack;
+
+  final Function onSubmitCompleted;
 
   @override
   _RecoverCardState createState() => _RecoverCardState();
@@ -39,7 +42,7 @@ class _RecoverCardState extends State<_RecoverCard>
 
     _submitController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
     );
   }
 
@@ -70,8 +73,7 @@ class _RecoverCardState extends State<_RecoverCard>
       showSuccessToast(context, messages.flushbarTitleSuccess,
           messages.recoverPasswordSuccess);
       setState(() => _isSubmitting = false);
-      await _submitController!.reverse();
-      if (widget.navigateBack) widget.onSwitchLogin();
+      widget.onSubmitCompleted();
       return true;
     }
   }
@@ -82,7 +84,7 @@ class _RecoverCardState extends State<_RecoverCard>
       controller: _nameController,
       width: width,
       labelText: messages.userHint,
-      prefixIcon: Icon(FontAwesomeIcons.solidUserCircle),
+      prefixIcon: const Icon(FontAwesomeIcons.solidUserCircle),
       keyboardType: TextFieldUtils.getKeyboardType(widget.userType),
       autofillHints: [TextFieldUtils.getAutofillHints(widget.userType)],
       textInputAction: TextInputAction.done,
@@ -110,10 +112,10 @@ class _RecoverCardState extends State<_RecoverCard>
       onPressed: !_isSubmitting
           ? () {
               _formRecoverKey.currentState!.save();
-              widget.onSwitchLogin();
+              widget.onBack();
             }
           : null,
-      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       textColor: loginTheme?.switchAuthTextColor ?? calculatedTextColor,
       child: Text(messages.goBackButton),
@@ -151,16 +153,18 @@ class _RecoverCardState extends State<_RecoverCard>
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyText2,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildRecoverNameField(textFieldWidth, messages, auth),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  messages.recoverPasswordDescription,
+                  auth.onConfirmRecover != null
+                      ? messages.recoverCodePasswordDescription
+                      : messages.recoverPasswordDescription,
                   key: kRecoverPasswordDescriptionKey,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.bodyText2,
                 ),
-                SizedBox(height: 26),
+                const SizedBox(height: 26),
                 _buildRecoverButton(theme, messages),
                 _buildBackButton(theme, messages, widget.loginTheme),
               ],
