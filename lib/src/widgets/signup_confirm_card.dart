@@ -79,10 +79,10 @@ class ConfirmSignupCardState extends State<ConfirmSignupCard>
       return false;
     }
 
-    showSuccessToast(
+    /*showSuccessToast(
         context, messages.flushbarTitleSuccess, messages.confirmSignupSuccess);
     setState(() => _isSubmitting = false);
-    await _submitController.reverse();
+    await _submitController.reverse();*/
 
     if (!widget.loginAfterSignUp) {
       auth.mode = AuthMode.login;
@@ -197,11 +197,11 @@ class ConfirmSignupCardState extends State<ConfirmSignupCard>
                   style: theme.textTheme.bodyText2,
                 ),
                 const SizedBox(height: 20),
-                _buildConfirmationCodeField(textFieldWidth, messages),
-                const SizedBox(height: 10),
-                _buildResendCode(theme, messages),
+                //_buildConfirmationCodeField(textFieldWidth, messages),
+                //const SizedBox(height: 10),
+                //_buildResendCode(theme, messages),
                 _buildConfirmButton(theme, messages),
-                _buildBackButton(theme, messages),
+                //_buildBackButton(theme, messages),
               ],
             ),
           ),
